@@ -52,10 +52,13 @@ module Kitchen
               ## 10.04, 12.04 include add-apt-repository in
               #{sudo_env('apt-get')} -y install python-software-properties
 
-              ## AJE
-              #{sudo_env('apt-get')} -y install git
-              git clone git@github.com:aerickson/ansible.git /tmp/ansible_git_install
-
+              ## 10.04 version of add-apt-repository doesn't accept --yes
+              ## later versions require interaction from user, so we must specify --yes
+              ## First try with -y flag, else if it fails, try without.
+              ## "add-apt-repository: error: no such option: -y" is returned but is ok to ignore, we just retry
+              #{sudo_env('add-apt-repository')} -y #{@config[:ansible_apt_repo]} || #{sudo_env('add-apt-repository')} #{@config[:ansible_apt_repo]}
+              #{sudo_env('apt-get')} update
+              #{sudo_env('apt-get')} -y install ansible#{ansible_debian_version}
             fi
             INSTALL
           end
