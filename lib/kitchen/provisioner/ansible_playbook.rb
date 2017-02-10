@@ -452,7 +452,7 @@ module Kitchen
           fi
 
           #{export_http_proxy}
-          git clone git://github.com/ansible/ansible.git --recursive #{config[:root_path]}/ansible #{install_source_rev}
+          git clone git://github.com/aerickson/ansible.git --recursive #{config[:root_path]}/ansible #{install_source_rev}
           #{sudo_env('easy_install')} pip
           #{sudo_env('pip')} install -U setuptools
           #{sudo_env('pip')} install six paramiko PyYAML Jinja2 httplib2
@@ -787,6 +787,8 @@ module Kitchen
       def install_source_rev
         config[:ansible_source_rev] ? "--branch #{config[:ansible_source_rev]}" : nil
       end
+
+      # TODO(aje): add call to get github URL
 
       def http_proxy
         config[:http_proxy]
